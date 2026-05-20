@@ -2,18 +2,22 @@
 let pedidos = [];
 
 function agregarPedido() {
-  mostrar_menu();
-    let producto = prompt("Nombre del producto:");
-    let precio   = parseFloat(prompt("Precio:"));
+    console.table(productos);
 
-    if (!producto || isNaN(precio)) {
-        alert("Datos inválidos");
+    let indice = parseInt(prompt(
+        "Escribe el índice del producto a pedir\n" + "(revisa la consola para ver el catálogo)"
+    ));
+
+    if (isNaN(indice) || indice < 0 || indice >= productos.length) {
+        alert("Índice inválido");
         return;
     }
 
-    pedidos.push({ producto, precio });
-    console.log(`Pedido agregado: ${producto} - $${precio}`);
-    mostrarPedidos(); 
+    const { nombre, precio } = productos[indice];
+
+    pedidos.push({ producto: nombre, precio });
+    console.log(`Pedido agregado: ${nombre} - $${precio}`);
+    mostrarPedidos();
 }
 
 function calcularTotales() {
