@@ -16,21 +16,21 @@ function agregarPedido(producto, precio){
 
 function mostrarPedidos(){
     console.log("Pedidos actuales:");
-    pedidos.forEach((pedido, index) => {
-        console.log(`${index + 1}. ${pedido.producto} - $${pedido.precio}`);
-    });
+    console.table(pedidos);
+    // pedidos.forEach((pedido, index) => {
+    //     console.log(`${index + 1}. ${pedido.producto} - $${pedido.precio}`);
+    // });
     console.log(`Total acumulado: $${totalAcumulado}`);
+    
 }
 
 
-agregarPedido("Café Americano", 35);
-agregarPedido("Cappuccino", 45);
-agregarPedido("Pan de dulce", 20);
-mostrarPedidos();
+if (require.main === module) {
+  agregarPedido("Café Americano", 35);
+  agregarPedido("Cappuccino", 45);
+  agregarPedido("Pan de dulce", 20);
+  mostrarPedidos();
+}
 
 
-// module.exports = {
-//     agregarPedido,
-//     pedidos,
-//     totalAcumulado
-// }
+module.exports = { agregarPedido, mostrarPedidos, pedidos, totalAcumulado };

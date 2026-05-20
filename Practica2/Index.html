@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>☕ Cafetería JS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --espresso: #1a0a00;
+      --cafe:     #3b1f0a;
+      --caramelo: #c8860a;
+      --crema:    #f5e6c8;
+      --leche:    #fdf6ec;
+      --vapor:    rgba(255,255,255,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--espresso);
+      color: var(--crema);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Fondo con textura de grano ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 3rem 1rem 1.5rem;
+      position: relative;
+      animation: fadeDown .7s ease both;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      color: var(--caramelo);
+      letter-spacing: .04em;
+    }
+    header p { color: var(--crema); opacity: .6; font-size: .8rem; margin-top: .4rem; }
+
+    /* ── Tabs ── */
+    nav {
+      display: flex; justify-content: center; gap: .5rem;
+      padding: 1.5rem 1rem;
+      animation: fadeDown .7s .1s ease both;
+    }
+    .tab {
+      background: var(--vapor);
+      border: 1px solid rgba(200,134,10,.25);
+      color: var(--crema);
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      padding: .55rem 1.4rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .tab:hover { background: rgba(200,134,10,.15); border-color: var(--caramelo); }
+    .tab.active {
+      background: var(--caramelo);
+      border-color: var(--caramelo);
+      color: var(--espresso);
+      font-weight: 600;
+    }
+
+    /* ── Paneles ── */
+    main { max-width: 860px; margin: 0 auto; padding: 0 1rem 4rem; }
+    .panel { display: none; animation: fadeUp .4s ease both; }
+    .panel.active { display: block; }
+
+    /* ── Tarjetas ── */
+    .card {
+      background: var(--vapor);
+      border: 1px solid rgba(200,134,10,.18);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--caramelo);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Tabla catálogo ── */
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    thead tr { border-bottom: 1px solid rgba(200,134,10,.3); }
+    th { text-align: left; padding: .5rem .8rem; color: var(--caramelo); font-weight: 500; }
+    td { padding: .55rem .8rem; border-bottom: 1px solid rgba(255,255,255,.05); }
+    tr:last-child td { border-bottom: none; }
+    .precio { font-weight: 600; color: var(--caramelo); }
+    .acciones { display: flex; gap: .4rem; }
+
+    /* ── Botones ── */
+    .btn {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      padding: .35rem .9rem;
+      border-radius: .4rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.96); }
+    .btn-primary  { background: var(--caramelo); color: var(--espresso); font-weight: 600; }
+    .btn-danger   { background: #7a1a1a; color: #ffb3b3; }
+    .btn-edit     { background: rgba(200,134,10,.2); color: var(--caramelo); border: 1px solid rgba(200,134,10,.4); }
+    .btn:hover    { opacity: .85; }
+
+    /* ── Form agregar producto ── */
+    .form-row { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1rem; }
+    input[type="text"], input[type="number"] {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(200,134,10,.3);
+      border-radius: .5rem;
+      color: var(--crema);
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      padding: .5rem .8rem;
+      flex: 1; min-width: 120px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input:focus { border-color: var(--caramelo); }
+
+    /* ── Menú cliente ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .8rem;
+    }
+    .menu-item {
+      background: rgba(200,134,10,.08);
+      border: 1px solid rgba(200,134,10,.2);
+      border-radius: .8rem;
+      padding: 1rem;
+      transition: transform .2s, background .2s;
+      cursor: pointer;
+    }
+    .menu-item:hover {
+      transform: translateY(-3px);
+      background: rgba(200,134,10,.16);
+    }
+    .menu-item .nombre { font-size: .9rem; margin-bottom: .4rem; }
+    .menu-item .precio-item { font-size: 1.1rem; color: var(--caramelo); font-weight: 600; }
+    .menu-item .hint { font-size: .65rem; opacity: .45; margin-top: .4rem; }
+
+    /* ── Caja / pedidos ── */
+    .pedido-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .55rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: .82rem;
+      animation: fadeUp .3s ease both;
+    }
+    .pedido-row:last-child { border-bottom: none; }
+    .total-bar {
+      display: flex; justify-content: space-between;
+      padding: 1rem 0 0;
+      font-size: 1rem;
+      border-top: 1px solid rgba(200,134,10,.4);
+      margin-top: .5rem;
+    }
+    .total-bar span:last-child { color: var(--caramelo); font-weight: 700; font-size: 1.2rem; }
+    .empty { opacity: .4; font-size: .8rem; text-align: center; padding: 1.5rem 0; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--caramelo); color: var(--espresso);
+      font-family: 'DM Mono', monospace; font-size: .8rem; font-weight: 600;
+      padding: .6rem 1.4rem; border-radius: 2rem;
+      transition: transform .3s ease; z-index: 100;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity:0; transform: translateY(-16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(12px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>☕ Cafetería JS</h1>
+  <p>Practica No. 2 — Integración de módulos</p>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showPanel('cocina')">🍽 Cocina</button>
+  <button class="tab"        onclick="showPanel('cliente')">👤 Cliente</button>
+  <button class="tab"        onclick="showPanel('caja')">🧾 Caja</button>
+</nav>
+
+<main>
+
+  <!-- ══ COCINA ══ -->
+  <div id="panel-cocina" class="panel active">
+    <div class="card">
+      <h2>Catálogo de productos</h2>
+      <table>
+        <thead><tr><th>#</th><th>Nombre</th><th>Precio</th><th>Acciones</th></tr></thead>
+        <tbody id="tabla-productos"></tbody>
+      </table>
+      <div class="form-row">
+        <input type="text"   id="inp-nombre"  placeholder="Nombre del producto"/>
+        <input type="number" id="inp-precio"  placeholder="Precio" step="0.5" min="0"/>
+        <button class="btn btn-primary" onclick="AgregarProducto()">＋ Agregar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CLIENTE ══ -->
+  <div id="panel-cliente" class="panel">
+    <div class="card">
+      <h2>Menú</h2>
+      <div class="menu-grid" id="menu-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══ CAJA ══ -->
+  <div id="panel-caja" class="panel">
+    <div class="card">
+      <h2>Pedidos del turno</h2>
+      <div id="lista-pedidos"><p class="empty">Sin pedidos aún.</p></div>
+      <div class="total-bar">
+        <span>Total acumulado</span>
+        <span id="total-display">$0</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+  // ══════════════════════════════
+  //  MÓDULO COCINA
+  // ══════════════════════════════
+  let productos = [
+    { nombre: "Leche",        precio: 2.5 },
+    { nombre: "Pan",          precio: 1.0 },
+    { nombre: "Huevos",       precio: 3.0 },
+    { nombre: "Tortas",       precio: 2.0 },
+    { nombre: "Quesadillas",  precio: 3.5 },
+    { nombre: "Queso",        precio: 4.0 },
+    { nombre: "Frijoles",     precio: 2.5 },
+  ];
+
+  function AgregarProducto() {
+    const nombre = document.getElementById('inp-nombre').value.trim();
+    const precio = parseFloat(document.getElementById('inp-precio').value);
+    if (!nombre || isNaN(precio) || precio <= 0) { toast("⚠️ Escribe nombre y precio válidos"); return; }
+    productos.push({ nombre, precio });
+    document.getElementById('inp-nombre').value = '';
+    document.getElementById('inp-precio').value = '';
+    renderCocina();
+    renderCliente();
+    toast(`✅ ${nombre} agregado al catálogo`);
+  }
+
+  function EditarProducto(i) {
+    const nombre = prompt("Nuevo nombre:", productos[i].nombre);
+    if (!nombre) return;
+    const precio = parseFloat(prompt("Nuevo precio:", productos[i].precio));
+    if (isNaN(precio)) return;
+    productos[i] = { nombre, precio };
+    renderCocina(); renderCliente();
+    toast(`✏️ ${nombre} actualizado`);
+  }
+
+  function EliminarProducto(i) {
+    const nombre = productos[i].nombre;
+    productos.splice(i, 1);
+    renderCocina(); renderCliente();
+    toast(`🗑️ ${nombre} eliminado`);
+  }
+
+  function renderCocina() {
+    const tbody = document.getElementById('tabla-productos');
+    tbody.innerHTML = productos.map((p, i) => `
+      <tr>
+        <td style="opacity:.4">${i}</td>
+        <td>${p.nombre}</td>
+        <td class="precio">$${p.precio.toFixed(2)}</td>
+        <td><div class="acciones">
+          <button class="btn btn-edit"   onclick="EditarProducto(${i})">editar</button>
+          <button class="btn btn-danger" onclick="EliminarProducto(${i})">borrar</button>
+        </div></td>
+      </tr>`).join('');
+  }
+
+
+  function mostrar_prod() {
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = productos.map((p, i) => `
+      <div class="menu-item" onclick="agregarPedido('${p.nombre}', ${p.precio})">
+        <div class="nombre">${p.nombre}</div>
+        <div class="precio-item">$${p.precio.toFixed(2)}</div>
+        <div class="hint">toca para ordenar</div>
+      </div>`).join('');
+  }
+
+  function renderCliente() { mostrar_prod(); }
+
+  let pedidos = [];
+  let totalAcumulado = 0;
+
+  function agregarPedido(producto, precio) {
+    pedidos.push({ producto, precio });
+    totalAcumulado += precio;
+    renderCaja();
+    showPanel('caja');
+    toast(`🧾 ${producto} agregado a caja`);
+  }
+
+  function renderCaja() {
+    const lista = document.getElementById('lista-pedidos');
+    if (pedidos.length === 0) {
+      lista.innerHTML = '<p class="empty">Sin pedidos aún.</p>';
+    } else {
+      lista.innerHTML = pedidos.map((p, i) => `
+        <div class="pedido-row">
+          <span>${i + 1}. ${p.producto}</span>
+          <span class="precio">$${p.precio.toFixed(2)}</span>
+        </div>`).join('');
+    }
+    document.getElementById('total-display').textContent = `$${totalAcumulado.toFixed(2)}`;
+  }
+
+
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => {
+      if (t.textContent.toLowerCase().includes(name)) t.classList.add('active');
+    });
+  }
+
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  // ── Init ──
+  renderCocina();
+  renderCliente();
+  renderCaja();
+</script>
+</body>
+</html>
