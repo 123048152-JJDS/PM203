@@ -38,8 +38,6 @@ function agregarPedido() {
       console.table(pedidos);
     }
   );
-
-
   mostrarPedidos();
   console.table(pedidos);
 }
@@ -48,7 +46,6 @@ function calcularTotales() {
     const subtotal = pedidos.reduce((acum, { precio }) => acum + precio, 0);
     const iva      = subtotal * 0.16;
     const total    = subtotal + iva;
-
     return { subtotal, iva, total };
 }
 

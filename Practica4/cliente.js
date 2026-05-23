@@ -1,58 +1,42 @@
-
-function mostrar_menu() {
+function mostrar_menu(productos){
     console.table(productos);
 }
 
-function menuDinamico() {
-    let menu = productos.map(({ nombre, precio }) => `${nombre} - $${precio}`);
-    menu.forEach(linea => console.log(linea));
-}
-
-function mostrar_promociones() {
+function mostrar_promociones(productos){
     let promos = hacerPromociones(productos);
-
-    let resultado = promos.map(p => ({
-        producto:   p.nombre,
-        original:   `$${p.precio}`,
-        promocion:  `$${p.precioPromo}`,
-        descuento:  p.descuento,
-    }));
-
-    console.table(resultado);
+    let promociones = promos.map(promocion => {
+        return {
+            producto: promocion.nombre,
+            precio: promocion.precioPromo
+        };
+    });
+    console.table(promociones);
 }
 
-function productos_disponibles() {
+function productos_disponibles(productos){
     let disponibles = [];
-    productos.forEach(({ nombre, categoria }) => {
-        disponibles.push({ producto: nombre, categoria });
+    productos.forEach(producto => {
+        disponibles.push({
+            producto: producto.nombre,
+            categoria: producto.categoria
+        });
     });
     console.table(disponibles);
 }
 
-
 function esperar(tiempo){
-
     return new Promise(resolve => {
-
         setTimeout(resolve, tiempo);
-
     });
-
 }
 
-
-async function mostrar_estado_pedido(pedido){
-
-    for(const estado of pedido.pedidoEstatus){
-
+async function mostrar_estado_pedido(pedidos){
+    for(const pedido of pedidos){
         console.log(`
-            Pedido #${pedido.id}
+            Pedido
             Producto: ${pedido.producto}
-            Estado: ${estado}
+            Estado: ${pedido.estatus}
         `);
-
         await esperar(2000);
-
     }
-
 }
