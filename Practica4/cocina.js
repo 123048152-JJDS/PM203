@@ -1,90 +1,88 @@
 let productos = [
-        {nombre: "Leche", precio: 40, categoria: "Alimentos"},
-        {nombre: "Pan", precio: 15, categoria: "Alimentos"},
-        {nombre: "Huevos", precio: 50, categoria: "Alimentos"},
-        {nombre: "Tortas", precio: 80, categoria: "Alimentos"},
-        {nombre: "Quesadillas", precio: 50, categoria: "Alimentos"},
-        {nombre: "Queso", precio: 46, categoria: "Alimentos"},
-        {nombre: "Frijoles", precio: 30, categoria: "Alimentos"},
-        {nombre: "Pay", precio: 70, categoria: "Postres"},
-        {nombre: "Jugo", precio: 35, categoria: "Bebidas"},
-        {nombre: "Cafe", precio: 45, categoria: "Bebidas"},
-    ];
+    {nombre: "Leche",       precio: 40, categoria: "Alimentos"},
+    {nombre: "Pan",         precio: 15, categoria: "Alimentos"},
+    {nombre: "Huevos",      precio: 50, categoria: "Alimentos"},
+    {nombre: "Tortas",      precio: 80, categoria: "Alimentos"},
+    {nombre: "Quesadillas", precio: 50, categoria: "Alimentos"},
+    {nombre: "Queso",       precio: 46, categoria: "Alimentos"},
+    {nombre: "Frijoles",    precio: 30, categoria: "Alimentos"},
+    {nombre: "Pay",         precio: 70, categoria: "Postres"  },
+    {nombre: "Jugo",        precio: 35, categoria: "Bebidas"  },
+    {nombre: "Cafe",        precio: 45, categoria: "Bebidas"  },
+];
+
+function prepararEnCocina(pedido) {
+    return new Promise((resolve, reject) => {
+        pedido.estatus = "En preparación";
+        console.log(`Cocina recibió: ${pedido.producto} - (${pedido.estatus})`);
+
+        let azar = Math.floor(Math.random() * 4) + 1;
+
+        if (azar === 3) {
+            pedido.estatus = "Faltan ingredientes";
+            reject("Error: faltan ingredientes");
+        } else if (azar === 4) {
+            pedido.estatus = "Error en la cocina";
+            reject("Error en la cocina");
+        } else {
+            pedido.estatus = "Listo";
+            resolve(`${pedido.producto} está listo`);
+        }
+    });
+}
 
 function AgregarProducto() {
-    let producto = prompt("Escribe tu producto");
-    let precio = prompt("Escribe tu precio");
-    let opcion = prompt(
+    let nombre  = prompt("Escribe el nombre del producto");
+    let precio  = prompt("Escribe el precio");
+    let opcion  = prompt(
         "Selecciona una categoría:\n" +
         "1. Postres\n" +
         "2. Bebidas\n" +
         "3. Alimentos"
-        );
-    let categoria;
+    );
 
+    let categoria;
     switch (opcion) {
-    case "1":
-        categoria = "Postres";
-        break;
-    case "2":
-        categoria = "Bebidas";
-        break;
-    case "3":
-        categoria = "Alimentos";
-        break;
-    default:
-        categoria = "Sin categoría";
+        case "1": categoria = "Postres";       break;
+        case "2": categoria = "Bebidas";       break;
+        case "3": categoria = "Alimentos";     break;
+        default:  categoria = "Sin categoría"; break;
     }
 
-    productos.push({
-        nombre: producto,
-        precio: parseFloat(precio),
-        categoria: categoria
-    });
+    productos.push({ nombre, precio: parseFloat(precio), categoria });
     localStorage.setItem("productos", JSON.stringify(productos));
-    console.table(productos)
+    console.table(productos);
 }
 
 function EditarProducto() {
-    let indice = prompt("Escribe el índice del producto a editar");
-    let producto = prompt("Escribe tu producto");
-    let precio = prompt("Escribe tu precio");
-    let opcion = prompt(
+    let indice  = prompt("Escribe el índice del producto a editar");
+    let nombre  = prompt("Escribe el nuevo nombre");
+    let precio  = prompt("Escribe el nuevo precio");
+    let opcion  = prompt(
         "Selecciona una categoría:\n" +
         "1. Postres\n" +
         "2. Bebidas\n" +
         "3. Alimentos"
-        );
+    );
 
     let categoria;
     switch (opcion) {
-    case "1":
-        categoria = "Postres";
-        break;
-    case "2":
-        categoria = "Bebidas";
-        break;
-    case "3":
-        categoria = "Alimentos";
-        break;
-    default:
-        categoria = "Sin categoría";
+        case "1": categoria = "Postres";       break;
+        case "2": categoria = "Bebidas";       break;
+        case "3": categoria = "Alimentos";     break;
+        default:  categoria = "Sin categoría"; break;
     }
 
-    productos[indice] = {
-        nombre: producto,
-        precio: parseFloat(precio),
-        categoria: categoria
-    };
+    productos[indice] = { nombre, precio: parseFloat(precio), categoria };
     localStorage.setItem("productos", JSON.stringify(productos));
-    console.table(productos)
+    console.table(productos);
 }
 
 function EliminarProducto() {
     let indice = prompt("Escribe el índice del producto a eliminar");
     productos.splice(indice, 1);
     localStorage.setItem("productos", JSON.stringify(productos));
-    console.table(productos)
+    console.table(productos);
 }
 
 function categoria() {
@@ -93,90 +91,35 @@ function categoria() {
         "1. Postres\n" +
         "2. Bebidas\n" +
         "3. Alimentos"
-        );
+    );
 
-    let categoria;
+    let cat;
     switch (opcion) {
-    case "1":
-        categoria = "Postres";
-        break;
-    case "2":
-        categoria = "Bebidas";
-        break;
-    case "3":
-        categoria = "Alimentos";
-        break;
-    default:
-        categoria = "Sin categoría";
+        case "1": cat = "Postres";       break;
+        case "2": cat = "Bebidas";       break;
+        case "3": cat = "Alimentos";     break;
+        default:  cat = "Sin categoría"; break;
     }
-    let productosFiltrados = productos.filter(producto => producto.categoria === categoria);
-    console.table(productosFiltrados)
+
+    console.table(productos.filter(p => p.categoria === cat));
 }
 
 function productoscaros() {
-    let productosCaros = productos.filter(producto => producto.precio >= 40.0);
-    console.table(productosCaros) 
+    console.table(productos.filter(p => p.precio >= 40));
 }
 
 function productosbaratos() {
-    let productosBaratos = productos.filter(producto => producto.precio < 40);
-    console.table(productosBaratos)  
+    console.table(productos.filter(p => p.precio < 40));
 }
 
-async function prepararPedido() {
-    let pedidoEstatus;
-    let pedido = parseInt(
-        prompt("Selecciona el número del pedido:")
-    ) - 1;
-    console.log(`Pedido seleccionado: ${pedido}`);
+function buscarProducto() {
+    let nombre     = prompt("¿Qué producto buscas?");
+    let encontrado = productos.find(p => p.nombre.toLowerCase() === nombre.toLowerCase());
 
-    if (pedidos[pedido]) {
-        let estatus = Math.floor(Math.random() * 4) + 1;
-        const promesa = new Promise((resolve, reject) => {
-            if (estatus === 3) {
-                pedidos[pedido].estatus = "Faltan ingredientes";
-                reject(
-                    "Error: faltan ingredientes"
-                );
-            } else if (estatus === 4) {
-                pedidos[pedido].estatus ="Error en la cocina";
-                reject(
-                    "Error en la cocina"
-                );
-            } else {
-                resolve();
-            }
-        });
-
-        try {
-            await promesa;
-            console.log("Pedido continúa...");
-        } catch(error) {
-            console.log(error);
-            return;
-        }
-
-        estatus = prompt(
-            "Selecciona su estatus:\n" +
-            "1. Preparando\n" +
-            "2. Listo\n"
-        );
-
-        switch (estatus) {
-            case "1":
-                pedidoEstatus = "Preparando";
-                break;
-            case "2":
-                pedidoEstatus = "Listo";
-                break;
-            default:
-                pedidoEstatus = "Error";
-        }
-        pedidos[pedido].estatus = pedidoEstatus;
-        console.log(
-            `Pedido actualizado a ${pedidoEstatus}`
-        );
+    if (encontrado) {
+        console.log("Producto encontrado:", encontrado);
+        alert(`${encontrado.nombre} — $${encontrado.precio} (${encontrado.categoria})`);
     } else {
-        console.log("Pedido no encontrado");
+        alert("Producto no encontrado");
     }
 }

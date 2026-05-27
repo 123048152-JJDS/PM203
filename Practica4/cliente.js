@@ -1,41 +1,42 @@
-function mostrar_menu(productos){
+function mostrar_menu() {
     console.table(productos);
 }
 
-function mostrar_promociones(productos){
-    let promos = hacerPromociones(productos);
-    let promociones = promos.map(promocion => {
-        return {
-            producto: promocion.nombre,
-            precio: promocion.precioPromo
-        };
-    });
-    console.table(promociones);
+function menuDinamico() {
+    let menu = productos.map(({ nombre, precio }) => `${nombre} - $${precio}`);
+    menu.forEach(linea => console.log(linea));
 }
 
-function productos_disponibles(productos){
+function mostrar_promociones() {
+    let promos = hacerPromociones(productos);
+    let resultado = promos.map(p => ({
+        producto:  p.nombre,
+        original:  `$${p.precio}`,
+        promocion: `$${p.precioPromo}`,
+        descuento: p.descuento,
+    }));
+    console.table(resultado);
+}
+
+function productos_disponibles() {
     let disponibles = [];
-    productos.forEach(producto => {
-        disponibles.push({
-            producto: producto.nombre,
-            categoria: producto.categoria
-        });
+    productos.forEach(({ nombre, categoria }) => {
+        disponibles.push({ producto: nombre, categoria });
     });
     console.table(disponibles);
 }
 
-function esperar(tiempo){
+function esperar(tiempo) {
     return new Promise(resolve => {
         setTimeout(resolve, tiempo);
     });
 }
 
-async function mostrar_estado_pedido(pedidos){
-    for(const pedido of pedidos){
+async function mostrar_estado_pedido() {
+    for (const pedido of pedidos) {
         console.log(`
-            Pedido
             Producto: ${pedido.producto}
-            Estado: ${pedido.estatus}
+            Estado:   ${pedido.estatus}
         `);
         await esperar(2000);
     }
