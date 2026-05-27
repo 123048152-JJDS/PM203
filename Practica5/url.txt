@@ -1,0 +1,29 @@
+#Crear Proyecto expo default
+
+npx create-expo-app@latest
+
+#Error W11
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+#Restauracion
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
+
+Niveles disponibles por si quieres algo intermedio:
+Política        Descripción
+Restricted      ❌ Bloquea todo (default de Windows)
+RemoteSigned    ✅ Lo que activaste antes
+AllSigned       Solo scripts firmados digitalmente
+Unrestricted    Permite todo (no recomendado)
+
+
+Get-ExecutionPolicy -List
+
+#Ejecucion del Proyecto (ejecutar en la carpeta del proyecto cd myapp1)
+npx expo start              #Genera un QR que tenemos que escanear en la app Expo Go (Los dispositivos tiene que estar en la misma red, si no nos encontramos en una misma red podemos precionar W, para ejecutarlo en web)
+npx expo start --web        #Es lo mismo que lo anterior solo sin precionar W
+
+#Create proyecto platilla en la carpeta de Practica5
+npx create-expo-app-@latest miapp2 --template
+    #Usamos blank
+    npx expo install react-dom react-native-web
