@@ -24,6 +24,6 @@ npx expo start              #Genera un QR que tenemos que escanear en la app Exp
 npx expo start --web        #Es lo mismo que lo anterior solo sin precionar W
 
 #Create proyecto platilla en la carpeta de Practica5
-npx create-expo-app-@latest miapp2 --template
+npx create-expo-app@latest myApp2 --template
     #Usamos blank
     npx expo install react-dom react-native-web
