@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Saludo } from './components/Saludo';
 import { Saludo2 } from './components/Saludo2';
+import { Perfil } from './components/Perfil';
 
 /*Zona 2: Main - Hogar de los componentes */
 export default function App() {
@@ -14,16 +15,19 @@ export default function App() {
       
       <Image source={require('./assets/wave.png')}/>
       
-      <Text>------------Componetes Nativos-----------------------</Text>
+      <Text>------------Componentes Nativos-----------------------</Text>
       <Text>Hola mundo React Native!</Text>
       
       {/* <Text>Open up App.js to start working on your app!</Text> */}
 
-      <Text>------------Componetes Personalizados Simples-----------------------</Text>
+      <Text>------------Componentes Personalizados Simples-----------------------</Text>
       <Saludo></Saludo>
 
-      <Text>------------Componetes Personalizados Compuestos-----------------------</Text>
+      <Text>------------Componentes Personalizados Compuestos-----------------------</Text>
       <Saludo2></Saludo2>
+
+      <Text>------------Mi Perfil Personal-----------------------</Text>
+      <Perfil />
 
       <StatusBar style="auto" />
     </View>
