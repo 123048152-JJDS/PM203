@@ -11,24 +11,24 @@ export default function App() {
     /*Cuando tenemos varios componentes debemos almacenarlos en un View (Se considera como un div en html) */
     <View style={styles.container}>
       
-      {/* <Image></Image> */}
+      {/* <Image></Image>
       
       <Image source={require('./assets/wave.png')}/>
       
       <Text>------------Componentes Nativos-----------------------</Text>
       <Text>Hola mundo React Native!</Text>
-      
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
 
       <Text>------------Componentes Personalizados Simples-----------------------</Text>
       <Saludo></Saludo>
 
       <Text>------------Componentes Personalizados Compuestos-----------------------</Text>
-      <Saludo2></Saludo2>
+      <Saludo2></Saludo2> */}
 
       <Text>------------Mi Perfil Personal-----------------------</Text>
-      <Perfil />
+      <Perfil nombre="Jesus Jimenez De Santiago" carrera="Ingeniería en Sistemas Computacionales" materia="Programación Móvil" cuatrimestre="9° Cuatrimestre" > </Perfil>
 
+      <Perfil nombre="Jesus" carrera="ISC" materia="Programación Móvil" cuatrimestre="9°" />
+      
       <StatusBar style="auto" />
     </View>
   );
