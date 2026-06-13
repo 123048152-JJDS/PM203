@@ -22,9 +22,9 @@ export default function App() {
       <Saludo></Saludo>
 
       <Text>------------Componentes Personalizados Compuestos-----------------------</Text>
-      <Saludo2></Saludo2> */}
+      <Saludo2></Saludo2> 
 
-      <Text>------------Mi Perfil Personal-----------------------</Text>
+      <Text>------------Mi Perfil Personal-----------------------</Text>*/}
       <Perfil nombre="Jesus Jimenez De Santiago" carrera="Ingeniería en Sistemas Computacionales" materia="Programación Móvil" cuatrimestre="9° Cuatrimestre" > </Perfil>
 
       <Perfil nombre="Jesus" carrera="ISC" materia="Programación Móvil" cuatrimestre="9°" />

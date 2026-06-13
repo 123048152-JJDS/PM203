@@ -1,19 +1,19 @@
 /*Perfil usando Desestructuracion */
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import React,{useState} from 'react';
 
 export const Perfil = ({ nombre, carrera, materia, cuatrimestre }) => {
     const [mostrar, setMostrar]=useState(false);
     return (
-        <View>
-            <Text>Nombre: {nombre}</Text>
+        <View style={styles.tarjeta}>
+            <Text style={styles.nombre}>Nombre: {nombre}</Text>
 
             {/* Rendelizado Condicional */}
             {mostrar && 
             <>
-                <Text>Carrera: {carrera}</Text>
-                <Text>Materia: {materia}</Text>
-                <Text>Cuatrimestre: {cuatrimestre}</Text>
+                <Text style={styles.carrera}>Carrera: {carrera}</Text>
+                <Text style={styles.otroTexto}>Materia: {materia}</Text>
+                <Text style={styles.otroTexto}>Cuatrimestre: {cuatrimestre}</Text>
             </>
             }
             <Button title="Mostrar Perfil" onPress={ ()=>{setMostrar(!mostrar)}}/>
@@ -37,3 +37,29 @@ export const Perfil = (props) => {
     );
 };
 */
+
+const styles = StyleSheet.create({
+    nombre:{
+        fontSize: 24,
+        fontWeight: 600,
+        textTransform: 'uppercase',
+    },
+
+    carrera:{
+        fontSize: 18,
+        color: 'blue',
+        fontFamily: 'Roboto',
+    },
+
+    otroTexto:{
+        fontSize: 12,
+        fontFamily: 'Courier',
+        fontStyle: 'italic',
+    },
+
+    tarjeta:{
+        borderWidth: 2,
+        padding:25,
+        margin:15,
+    },
+});
