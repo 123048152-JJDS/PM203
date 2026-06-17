@@ -2,10 +2,10 @@
 import { View, Text, Button, StyleSheet } from 'react-native';
 import React,{useState} from 'react';
 
-export const Perfil = ({ nombre, carrera, materia, cuatrimestre }) => {
+export const Perfil = ({ nombre, carrera, materia, cuatrimestre, estiloExt }) => {
     const [mostrar, setMostrar]=useState(false);
     return (
-        <View style={styles.tarjeta}>
+        <View style={[styles.tarjeta, estiloExt]}>
             <Text style={styles.nombre}>Nombre: {nombre}</Text>
 
             {/* Rendelizado Condicional */}
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'blue',
         fontFamily: 'Roboto',
+        textAlign: 'center',
     },
 
     otroTexto:{
