@@ -1,17 +1,15 @@
 /*Zona 1: Importaciones de componentes y archivos */
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import MenuScreen from './screens/MenuScreen';
+
 
 /*Zona 2: Main - Hogar de los componentes */
-export default function App() {
+export default function ActivityIndicatorScreen() {
   return (
     <View style={styles.container}>
-
-      <MenuScreen></MenuScreen>
-
-      <StatusBar style="auto" />
-
+        <Text> Aqui va la practica de Ana</Text>
+        
+        <StatusBar style="auto" />
     </View>
   );
 }
