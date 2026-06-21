@@ -1,5 +1,5 @@
 /*Zona 1: Importaciones de componentes y archivos */
-import { useState } from 'react';
+import {useState} from 'react';
 import { StyleSheet, Text, View, Pressable, Switch, Alert, StatusBar } from 'react-native';
 
 
@@ -9,35 +9,35 @@ export default function PressableScreen() {
 
   const toggleSwitch = () => setIsDarkMode(previousState => !previousState);
   return (
-    <View style={[styles.container, isDarkMode ? styles.bgDark : styles.bgLight]}>
-      <Text style={[styles.title, isDarkMode ? styles.textLight : styles.textDark]}> Ajuste del Sistema </Text>
+    <View style={[ styles.container, isDarkMode ? styles.bgDark : styles.bgLight]}>
+        <Text style={[styles.title, isDarkMode ? styles.textDark : styles.textLight ]}> Ajuste del Sistema </Text>
+        
+        <View style={styles.row}>
+          <Text style={[styles.text, isDarkMode ? styles.textDark : styles.textLight ]}> 
+            Modo Oscuro {isDarkMode ? "Activado" : "Desactivado"} 
+            </Text>
+        </View>
+        <Switch 
+          trackColor={{ false: 'black', true: 'white' }}
+          thumbColor={isDarkMode ? 'yellow' : 'gray'}
+          onValueChange={toggleSwitch}
+          value={isDarkMode}
+          disabled={false}
+        />
 
-      <View style={styles.row}>
-        <Text style={[styles.text, isDarkMode ? styles.textLight : styles.textDark]}>
-          Modo Oscuro {isDarkMode ? "Activado" : "Desactivado"}
-        </Text>
-      </View>
-      <Switch
-        trackColor={{ false: 'black', true: 'white' }}
-        thumbColor={isDarkMode ? 'yellow' : 'gray'}
-        onValueChange={toggleSwitch}
-        value={isDarkMode}
-        disabled={false}
-      />
+        <Pressable
+          onPress={() => Alert.alert('Exito', 'Has presionado el botón')}
+          onLongPress={() => Alert.alert('Exito', 'Has presionado el botón por mucho tiempo')}
+          delayLongPress={2000}
+          style={({ pressed }) => [
+            styles.button,
+            { backgroundColor: pressed ? 'blue' : 'green' },
+          ]}
+        >
+          <Text style={styles.buttonText}>Presioname</Text>
+        </Pressable>
 
-      <Pressable
-        onPress={() => Alert.alert('Exito', 'Has presionado el botón')}
-        onLongPress={() => Alert.alert('Exito', 'Has presionado el botón por mucho tiempo')}
-        delayLongPress={2000}
-        style={({ pressed }) => [
-          styles.button,
-          { backgroundColor: pressed ? 'blue' : 'green' },
-        ]}
-      >
-        <Text style={styles.buttonText}>Presioname</Text>
-      </Pressable>
-
-      <StatusBar style="auto" />
+        <StatusBar style="auto" /> 
     </View>
   );
 }
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 
   bgLight: { backgroundColor: '#f5f5f5' },
-
+  
   bgDark: { backgroundColor: '#121212' },
 
   title: {
