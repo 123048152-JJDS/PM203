@@ -7,7 +7,7 @@ import { View, ScrollView, Text, TextInput, Alert, Button, StyleSheet, Platform,
 
 /*Zona 2: Main - Hogar de los componentes */
 Platform
-if (Platform.OS === "web"){
+if (Platform.OS === "web") {
   Alert.alert = (titular, mensaje, boton) => {
     const list = Array.isArray(mensaje) ? mensaje : boton;
     if (list) {
@@ -25,32 +25,26 @@ export default function TextInputScreen() {
   const [numero, setNumero] = useState("");
   const [bio, setBio] = useState("");
 
-  const registro = () =>{
-    if (!nombre || !correo || !contraseña || !numero){
+  const registro = () => {
+    if (!nombre || !correo || !contraseña || !numero) {
       Alert.alert("Faltam datos", "Complete los datos faltantes");
       return;
     }
-    if (!correo.includes("@") || !correo.includes(".com")){
+    if (!correo.includes("@") || !correo.includes(".com")) {
       Alert.alert("Correo invalido", "El correo debe tener @ y .com");
       return;
     }
-    if (!numero.match(/^[0-9]+/)){
+    if (!numero.match(/^[0-9]+/)) {
       Alert.alert("Numero Invalido", "El numero solo debe contener numeros del 0 al 9");
       setNumero("");
       return;
     }
 
     Alert.alert(`Registrar ${nombre}`), [
-      {
-        text: "No",
-        styles:"cancel",
-      },
-      {
-        text: "Si",
-        onPress:() => Alert.alert("Exito", "Usuario registrado correctamente")
-      },
+      { text: "No", styles: "cancel", },
+      { text: "Si", onPress: () => Alert.alert("Exito", "Usuario registrado correctamente") },
     ]
-  };  
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -77,7 +71,7 @@ export default function TextInputScreen() {
           style={styles.input}
           placeholder='Ingrese su contraseña'
           placeholderTextColor="black"
-          secureTextEntry="true"
+          secureTextEntry={true}
           autoCapitalize='none'
           value={contraseña}
           onChangeText={(texto) => setContraseña(texto)}
@@ -96,14 +90,14 @@ export default function TextInputScreen() {
           style={styles.input}
           placeholder='Cuentanos sobre ti (Opcional)'
           placeholderTextColor="black"
-          multiline="true"
+          multiline={true}
           numberOfLines={4}
           maxLength={20}
           value={bio}
-          onChangeText={(texto) => setNumero(texto)}
+          onChangeText={(texto) => setBio(texto)}
         />
 
-        <Button title='Registrar' color="red" onPress={registro}/>
+        <Button title='Registrar' color="red" onPress={registro} />
       </View>
     </ScrollView>
   );
@@ -113,7 +107,7 @@ export default function TextInputScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "z#fff",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
