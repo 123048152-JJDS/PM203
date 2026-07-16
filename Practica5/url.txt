@@ -27,3 +27,12 @@ npx expo start --web        #Es lo mismo que lo anterior solo sin precionar W
 npx create-expo-app@latest myApp2 --template
     #Usamos blank
     npx expo install react-dom react-native-web
+
+
+
+Icons
+npx expo install react-native-screens@~4.16.0
+    npx expo install react-native-safe-area-context
+    npx expo install expo-router
+
+npx expo install @expo/vector-icons

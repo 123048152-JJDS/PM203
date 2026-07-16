@@ -38,7 +38,7 @@ export default function ModalScreen() {
 
       {/* Botón que abre el Modal de confirmación */}
       <Pressable style={styles.primaryButton} onPress={() => setModalVisible(true)}>
-        <Text style={styles.primaryButtonText}>Confirmar reserva</Text>
+        <Text style={styles.primaryButtonText}>Confirmar reservacion</Text>
       </Pressable>
 
       {/* Botón que abre el Bottom Sheet para elegir modalidad */}
