@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import {  View,  SafeAreaView,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform,  ActivityIndicator, } from "react-native";
+import {  View,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform,  ActivityIndicator, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getAuthFetchOptions } from "../utils/auth";
+import { API_URL } from "../utils/config";
 
 export default function EditarUsuariosScreen() {
   const router = useRouter();
@@ -30,7 +32,7 @@ export default function EditarUsuariosScreen() {
       setCargando(true);
 
       const respuesta = await fetch(
-        `http://127.0.0.1:5000/v1/usuarios/${id}`,
+        `${API_URL}/v1/usuarios/${id}`,
         getAuthFetchOptions("PUT", {
           nombre: nombre.trim(),
           edad: parseInt(edad),
@@ -39,7 +41,11 @@ export default function EditarUsuariosScreen() {
 
       if (respuesta.ok) {
         mostrarMensaje("Éxito", "Usuario actualizado correctamente");
-        router.back();
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace("/consulta");
+        }
       } else {
         const datos = await respuesta.json();
         mostrarMensaje("Error", datos.detail || "No se pudo actualizar");
@@ -85,7 +91,16 @@ export default function EditarUsuariosScreen() {
           )}
         </Pressable>
 
-        <Pressable style={styles.botonCancelar} onPress={() => router.back()}>
+        <Pressable
+          style={styles.botonCancelar}
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace("/consulta");
+            }
+          }}
+        >
           <Text style={styles.textoCancelar}>Cancelar</Text>
         </Pressable>
       </View>

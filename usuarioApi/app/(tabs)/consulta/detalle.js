@@ -1,7 +1,9 @@
-import {  View,  Text,  StyleSheet,  SafeAreaView,  Pressable,  Modal,  ActivityIndicator,  Alert,  Platform, } from "react-native";
+import {  View,  Text,  StyleSheet,  Pressable,  Modal,  ActivityIndicator,  Alert,  Platform, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { getAuthFetchOptions } from "../../../utils/auth";
+import { API_URL } from "../../../utils/config";
 
 export default function DetalleUsuarioScreen() {
   const router = useRouter();
@@ -23,7 +25,7 @@ export default function DetalleUsuarioScreen() {
     try {
       setCargando(true);
       const respuesta = await fetch(
-        `http://127.0.0.1:5000/v1/usuarios/${id}`,
+        `${API_URL}/v1/usuarios/${id}`,
         getAuthFetchOptions("DELETE")
       );
 
@@ -84,7 +86,16 @@ export default function DetalleUsuarioScreen() {
           </Pressable>
         </View>
 
-        <Pressable style={styles.botonVolver} onPress={() => router.back()}>
+        <Pressable
+          style={styles.botonVolver}
+          onPress={() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace("/consulta");
+            }
+          }}
+        >
           <Text style={styles.textoVolver}>← Volver a la lista</Text>
         </Pressable>
       </View>

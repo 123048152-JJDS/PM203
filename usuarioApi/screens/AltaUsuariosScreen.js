@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import {  View,  SafeAreaView,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform, } from "react-native";
+import {  View,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { getAuthFetchOptions } from "../utils/auth";
+import { API_URL } from "../utils/config";
 
 export default function AltaUsuariosScreen() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function AltaUsuariosScreen() {
     try {
       setCargando(true);
       const respuesta = await fetch(
-        "http://127.0.0.1:5000/v1/usuarios/",
+        `${API_URL}/v1/usuarios/`,
         getAuthFetchOptions("POST", {
           nombre: nombre.trim(),
           edad: parseInt(edad),
@@ -37,7 +39,11 @@ export default function AltaUsuariosScreen() {
         mostrarMensaje("Éxito", "Se guardó el usuario");
         setNombre("");
         setEdad("");
-        router.back();
+        if (router.canGoBack()) {
+          router.back();
+        } else {
+          router.replace("/consulta");
+        }
       } else {
         const datos = await respuesta.json();
         mostrarMensaje("Error", datos.detail || "No se pudo guardar");

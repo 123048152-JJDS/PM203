@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from "react";
-import {  SafeAreaView,  View,  Text,  FlatList,  Pressable,  StyleSheet,  Alert, ActivityIndicator, } from "react-native";
+import {  View,  Text,  FlatList,  Pressable,  StyleSheet,  Alert, ActivityIndicator, } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useFocusEffect } from "expo-router";
 import { getAuthFetchOptions } from "../utils/auth";
+import { API_URL } from "../utils/config";
 
 export default function ConsultaUsuariosScreen() {
   const [usuarios, setUsuarios] = useState([]);
@@ -12,7 +14,7 @@ export default function ConsultaUsuariosScreen() {
     try {
       setCargando(true);
       const respuesta = await fetch(
-        "http://127.0.0.1:5000/v1/usuarios/",
+        `${API_URL}/v1/usuarios/`,
         getAuthFetchOptions("GET")
       );
       const datos = await respuesta.json();
