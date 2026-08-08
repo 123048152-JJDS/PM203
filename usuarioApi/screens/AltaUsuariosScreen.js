@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  SafeAreaView,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  Alert,
-  Platform,
-} from "react-native";
+import {  View,  SafeAreaView,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform, } from "react-native";
+import { useRouter } from "expo-router";
+import { getAuthFetchOptions } from "../utils/auth";
 
 export default function AltaUsuariosScreen() {
+  const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
   const [cargando, setCargando] = useState(false);
@@ -31,20 +25,23 @@ export default function AltaUsuariosScreen() {
 
     try {
       setCargando(true);
-      const respuesta = await fetch("http://127.0.0.1:5000/v1/usuarios/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nombre, edad: parseInt(edad) }),
-      });
+      const respuesta = await fetch(
+        "http://127.0.0.1:5000/v1/usuarios/",
+        getAuthFetchOptions("POST", {
+          nombre: nombre.trim(),
+          edad: parseInt(edad),
+        })
+      );
 
-      const datos = await respuesta.json();
-      console.log(datos);
-      mostrarMensaje("Éxito", "Se guardó el usuario");
-
-      setNombre("");
-      setEdad("");
+      if (respuesta.ok) {
+        mostrarMensaje("Éxito", "Se guardó el usuario");
+        setNombre("");
+        setEdad("");
+        router.back();
+      } else {
+        const datos = await respuesta.json();
+        mostrarMensaje("Error", datos.detail || "No se pudo guardar");
+      }
     } catch (error) {
       console.error("Error al guardar:", error);
       mostrarMensaje(

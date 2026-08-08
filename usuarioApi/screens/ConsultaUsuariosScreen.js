@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  StyleSheet,
-} from "react-native";
-import { useRouter } from "expo-router";
+import React, { useState, useCallback } from "react";
+import {  SafeAreaView,  View,  Text,  FlatList,  Pressable,  StyleSheet,  Alert, ActivityIndicator, } from "react-native";
+import { useRouter, useFocusEffect } from "expo-router";
+import { getAuthFetchOptions } from "../utils/auth";
 
 export default function ConsultaUsuariosScreen() {
   const [usuarios, setUsuarios] = useState([]);
+  const [cargando, setCargando] = useState(true);
   const router = useRouter();
 
   const obtenerUsuarios = async () => {
     try {
-      const respuesta = await fetch("http://127.0.0.1:5000/v1/usuarios/");
+      setCargando(true);
+      const respuesta = await fetch(
+        "http://127.0.0.1:5000/v1/usuarios/",
+        getAuthFetchOptions("GET")
+      );
       const datos = await respuesta.json();
       console.log("Respuesta API: ", datos);
-      setUsuarios(datos.usuarios || []);
+      if (Array.isArray(datos)) {
+        setUsuarios(datos);
+      } else {
+        setUsuarios(datos.usuarios || []);
+      }
     } catch (error) {
       console.log("Error API: ", error);
+      Alert.alert("Error", "No se pudieron obtener los usuarios");
+    } finally {
+      setCargando(false);
     }
   };
 
-  useEffect(() => {
-    obtenerUsuarios();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      obtenerUsuarios();
+    }, [])
+  );
 
   const renderTarjeta = ({ item }) => (
     <Pressable
-      style={({ pressed }) => [
-        styles.card,
-        { opacity: pressed ? 0.7 : 1 },
-      ]}
+      style={({ pressed }) => [styles.card, { opacity: pressed ? 0.7 : 1 }]}
       onPress={() => {
         router.push({
           pathname: "/consulta/detalle",
@@ -58,13 +63,21 @@ export default function ConsultaUsuariosScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.titulo}>Lista de Usuarios</Text>
-      <FlatList
-        data={usuarios}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={renderTarjeta}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
+
+      {cargando ? (
+        <ActivityIndicator size="large" color="#2563EB" style={styles.loader} />
+      ) : (
+        <FlatList
+          data={usuarios}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={renderTarjeta}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No hay usuarios registrados</Text>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -81,6 +94,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1F2937",
     marginBottom: 20,
+  },
+  loader: {
+    marginTop: 50,
+  },
+  emptyText: {
+    textAlign: "center",
+    color: "#6B7280",
+    fontSize: 16,
+    marginTop: 50,
   },
   card: {
     backgroundColor: "#FFFFFF",

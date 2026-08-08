@@ -1,17 +1,7 @@
 import React, { useState } from "react";
-import {
-  View,
-  SafeAreaView,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  Alert,
-  Platform,
-  ActivityIndicator,
-} from "react-native";
+import {  View,  SafeAreaView,  Text,  TextInput,  Pressable,  StyleSheet,  Alert,  Platform,  ActivityIndicator, } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { getAuthFetchOptions } from "../utils/auth"; // Ajusta la ruta según tu estructura
+import { getAuthFetchOptions } from "../utils/auth";
 
 export default function EditarUsuariosScreen() {
   const router = useRouter();
@@ -106,67 +96,67 @@ export default function EditarUsuariosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7FA',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#F5F7FA",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   card: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
+    width: "100%",
+    backgroundColor: "#FFFFFF",
     padding: 25,
     borderRadius: 15,
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },
   titulo: {
     fontSize: 26,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#1F2937',
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#1F2937",
     marginBottom: 4,
   },
   subtitulo: {
     fontSize: 14,
-    textAlign: 'center',
-    color: '#6B7280',
+    textAlign: "center",
+    color: "#6B7280",
     marginBottom: 20,
   },
   input: {
     height: 50,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: "#D1D5DB",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 18,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: "#F9FAFB",
     fontSize: 16,
   },
   boton: {
-    backgroundColor: '#2563EB',
+    backgroundColor: "#2563EB",
     paddingVertical: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 5,
   },
   botonDeshabilitado: {
     opacity: 0.6,
   },
   textoBoton: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 17,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   botonCancelar: {
     marginTop: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   textoCancelar: {
-    color: '#6B7280',
+    color: "#6B7280",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

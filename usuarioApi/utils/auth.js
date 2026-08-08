@@ -1,5 +1,5 @@
-const API_USER = 'admin';
-const API_PASSWORD = '1234';
+const API_USER = "admin";
+const API_PASSWORD = "1234";
 
 export const getAuthHeader = () => {
   const credentials = `${API_USER}:${API_PASSWORD}`;
@@ -7,12 +7,12 @@ export const getAuthHeader = () => {
   return `Basic ${encoded}`;
 };
 
-export const getAuthFetchOptions = (method = 'GET', body = null) => {
+export const getAuthFetchOptions = (method = "GET", body = null) => {
   const options = {
     method,
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': getAuthHeader(),
+      "Content-Type": "application/json",
+      Authorization: getAuthHeader(),
     },
   };
   if (body) {

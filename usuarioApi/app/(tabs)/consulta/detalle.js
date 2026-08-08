@@ -1,17 +1,7 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Pressable,
-  Modal,
-  ActivityIndicator,
-  Alert,
-  Platform,
-} from "react-native";
+import {  View,  Text,  StyleSheet,  SafeAreaView,  Pressable,  Modal,  ActivityIndicator,  Alert,  Platform, } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { getAuthFetchOptions } from "../../../utils/auth"; // Ajusta la ruta
+import { getAuthFetchOptions } from "../../../utils/auth";
 
 export default function DetalleUsuarioScreen() {
   const router = useRouter();
