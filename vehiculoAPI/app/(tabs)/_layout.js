@@ -8,7 +8,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="alta"
         options={{
-          title: "Formulario",
+          // title: "Formulario",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add" size={24} color={"red"} />
           ),
@@ -17,7 +17,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="consulta"
         options={{
-          title: "Listado",
+          // title: "Listado",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list" size={24} color={"blue"} />
           ),

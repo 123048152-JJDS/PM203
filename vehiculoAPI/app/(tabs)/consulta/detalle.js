@@ -1,4 +1,4 @@
-import {  View,  Text,  StyleSheet,  Pressable,  Modal,  ActivityIndicator,  Alert,  Platform, } from "react-native";
+import { View, Text, StyleSheet, Pressable, Modal, ActivityIndicator, Alert, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
@@ -7,7 +7,8 @@ import { API_URL } from "../../../utils/config";
 export default function DetalleVehiculoScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { id, marca, modelo, año, color } = params;
+  const { id, marca, modelo, año, anio, color } = params;  
+  const añoMostrar = año || anio || 'N/A';
 
   const [modalVisible, setModalVisible] = useState(false);
   const [cargando, setCargando] = useState(false);
@@ -20,36 +21,36 @@ export default function DetalleVehiculoScreen() {
     }
   };
 
-  const eliminarUsuario = async () => {
-    try {
-      setCargando(true);
-      const respuesta = await fetch(
-        `${API_URL}/v1/usuarios/${id}`,
-        getAuthFetchOptions("DELETE")
-      );
+  const eliminarVehiculo = async () => {
+  try {
+    setCargando(true);
+    const respuesta = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
 
-      if (respuesta.ok) {
-        mostrarMensaje("Éxito", "Usuario eliminado correctamente");
-        setModalVisible(false);
-        router.replace("/consulta");
-      } else {
-        const datos = await respuesta.json();
-        mostrarMensaje("Error", datos.detail || "No se pudo eliminar");
-        setModalVisible(false);
-      }
-    } catch (error) {
-      console.error("Error al eliminar:", error);
-      mostrarMensaje("Error", "No se pudo conectar con el servidor");
+    if (respuesta.ok) {
+      mostrarMensaje("Éxito", "Vehículo eliminado correctamente");
       setModalVisible(false);
-    } finally {
-      setCargando(false);
+      router.replace("/consulta");
+    } else {
+      const datos = await respuesta.json();
+      mostrarMensaje("Error", datos.detail || "No se pudo eliminar");
+      setModalVisible(false);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    mostrarMensaje("Error", "No se pudo conectar con el servidor");
+    setModalVisible(false);
+  } finally {
+    setCargando(false);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.titulo}>Detalle del Usuario</Text>
+        <Text style={styles.titulo}>Detalle del Vehículo</Text>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>ID:</Text>
@@ -65,7 +66,7 @@ export default function DetalleVehiculoScreen() {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Año:</Text>
-          <Text style={styles.value}>{año}</Text>
+          <Text style={styles.value}>{añoMostrar}</Text> 
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Color:</Text>
@@ -78,7 +79,13 @@ export default function DetalleVehiculoScreen() {
             onPress={() => {
               router.push({
                 pathname: "/consulta/actualizar",
-                params: { id, marca, modelo, año, color },
+                params: {
+                  id,
+                  marca,
+                  modelo,
+                  año: añoMostrar, 
+                  color,
+                },
               });
             }}
           >
@@ -140,7 +147,7 @@ export default function DetalleVehiculoScreen() {
                   styles.modalBotonEliminar,
                   cargando && styles.botonDeshabilitado,
                 ]}
-                onPress={eliminarUsuario}
+                onPress={eliminarVehiculo}
                 disabled={cargando}
               >
                 {cargando ? (

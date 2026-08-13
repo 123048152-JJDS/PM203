@@ -1,33 +1,24 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { router } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useRouter, useFocusEffect } from "expo-router";
-import { API_URL } from "./utils/config";
+import { API_URL, getAuthFetchOptions } from "../utils/config";
 
 export default function ConsultaScreen() {
   const [vehiculos, setVehiculos] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const obtenerVehiculos = async () => { 
+  const obtenerVehiculos = async () => {
     try {
-      setCargando(true);
-      const respuesta = await fetch(
-        `${API_URL}/api/v1/vehiculos`,
-        getAuthFetchOptions("GET")
-      );
+      setLoading(true);
+      const respuesta = await fetch(API_URL, getAuthFetchOptions("GET"));
       const datos = await respuesta.json();
-      console.log("Respuesta API: ", datos);
-      if (Array.isArray(datos)) {
-        setVehiculos(datos);
-      } else {
-        setVehiculos(datos.vehiculos || []);
-      }
+      setVehiculos(Array.isArray(datos) ? datos : datos.vehiculos || []);
     } catch (error) {
       console.log("Error API: ", error);
       Alert.alert("Error", "No se pudieron obtener los vehículos");
     } finally {
-      setCargando(false);
+      setLoading(false);
     }
   };
 
@@ -37,26 +28,27 @@ export default function ConsultaScreen() {
     }, [])
   );
 
+
+  const obtenerAnio = (item) => item.año || item.anio || 'N/A';
+
   const renderVehiculo = ({ item }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.card}
-      onPress={
-        () => {
+      onPress={() => {
         router.push({
           pathname: "/consulta/detalle",
           params: {
             id: item.id,
             marca: item.marca,
             modelo: item.modelo,
-            año: item.año,
+            año: obtenerAnio(item),
             color: item.color,
           },
         });
-      }
-      }
+      }}
     >
       <Text style={styles.title}>{item.marca || 'Vehículo'} - {item.modelo || item.title}</Text>
-      <Text style={styles.subtitle}>Año: {item.año || '2024'} | Color: {item.color || 'N/A'}</Text>
+      <Text style={styles.subtitle}>Año: {obtenerAnio(item)} | Color: {item.color || 'N/A'}</Text>
     </TouchableOpacity>
   );
 
@@ -68,7 +60,7 @@ export default function ConsultaScreen() {
       ) : (
         <FlatList
           data={vehiculos}
-          keyExtractor={(item) => item.id?.toString()}
+          keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
           renderItem={renderVehiculo}
           ListEmptyComponent={<Text style={styles.empty}>No hay vehículos registrados</Text>}
         />
@@ -83,5 +75,5 @@ const styles = StyleSheet.create({
   card: { backgroundColor: '#fff', padding: 15, borderRadius: 8, marginBottom: 10, elevation: 2 },
   title: { fontSize: 18, fontWeight: 'bold', color: '#333' },
   subtitle: { fontSize: 14, color: '#666', marginTop: 4 },
-  empty: { textAlign: 'center', marginTop: 20, color: '#888' }
+  empty: { textAlign: 'center', marginTop: 20, color: '#888' },
 });
